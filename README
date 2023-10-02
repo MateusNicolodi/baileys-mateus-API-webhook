@@ -1,0 +1,6 @@
+port 8001
+
+/ server working
+/scan hoolehay
+
+/send-message?message={{mensagem}}&number={{numero}}
