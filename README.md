@@ -9,7 +9,7 @@ port 8001
 
 
 <h1>INSTALAÇÃO:</h1>
-~~
+~~~shell
 mkdir baileys-mateus-API-webhook
 chmod 777 b
 chmod 777 baileys-mateus-API-webhook/
@@ -26,4 +26,4 @@ yarn add cors
 yarn add socket.io
 yarn
 node index.js 
-~~
+~~~
