@@ -170,6 +170,69 @@ app.get("/send-message", async (req, res) => {
     }
 });
 
+/*
+//Recurso é não-confiável, whatsapp cria metadados capazes de diferenciar se é uma fonte não oficial e não renderiza
+app.get("/send-link", async (req, res) => {
+    const tempMessage = req.query.message;
+    const link = req.query.link;
+    const number = req.query.number;
+
+    let numberWA;
+    try {
+        if (!number) {
+            res.status(500).json({
+                status: false,
+                response: "O numero não existe",
+            });
+        } else {
+            numberWA = number + "@s.whatsapp.net";
+
+            if (isConnected()) {
+
+
+                const exist = await sock.onWhatsApp(numberWA);
+
+                const templateButtons = [
+                    {index: 1, urlButton: {displayText: '⭐ BOTÃO!', url: link}}
+                ]
+                
+                const templateMessage = {
+                    text: tempMessage,
+                    footer: 'footer',
+                    templateButtons: templateButtons
+                }
+
+                if (exist?.jid || (exist && exist[0]?.jid)) {
+                    sock
+                        .sendMessage(exist.jid || exist[0].jid, 
+                            templateMessage
+                        )
+                        .then((result) => {
+                            res.status(200).json({
+                                status: true,
+                                response: result,
+                            });
+                        })
+                        .catch((err) => {
+                            res.status(500).json({
+                                status: false,
+                                response: err,
+                            });
+                        });
+                }
+            } else {
+                res.status(500).json({
+                    status: false,
+                    response: "Não está conectado",
+                });
+            }
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+*/
+
 io.on("connection", async (socket) => {
     soket = socket;
     if (isConnected()) {
