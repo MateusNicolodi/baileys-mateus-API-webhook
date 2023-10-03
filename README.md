@@ -1,13 +1,15 @@
+
+
 port 8001
 
-/ server working
-/scan hoolehay
+**/** server working
+**/scan** hoolehay
 
-/send-message?message={{mensagem}}&number={{numero}}
+**/send-message?message=**__{{mensagem}}__ **&number=** __{{numero}}__
 
 
-INSTALAÇÃO:
-
+<h1>INSTALAÇÃO:</h1>
+<h4>
   mkdir baileys-mateus-API-webhook
   chmod 777 b
   chmod 777 baileys-mateus-API-webhook/
@@ -24,3 +26,4 @@ INSTALAÇÃO:
   yarn add socket.io
   yarn
   node index.js 
+</h4>
