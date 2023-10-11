@@ -179,6 +179,7 @@ app.get("/send-group-message", async (req, res) => {
     let numberWA;
     try {
         if (!number) {
+            console.log("numero nao existe");
             res.status(500).json({
                 status: false,
                 response: "O numero não existe",
@@ -186,29 +187,29 @@ app.get("/send-group-message", async (req, res) => {
         } else {
             numberWA = number + "@g.us";
 
+            console.log(numberWA);
+
             if (isConnected()) {
 
 
                 const exist = await sock.onWhatsApp(numberWA);
-
-                if (exist?.jid || (exist && exist[0]?.jid)) {
-                    sock
-                        .sendMessage(exist.jid || exist[0].jid, {
-                            text: tempMessage,
-                        })
-                        .then((result) => {
-                            res.status(200).json({
-                                status: true,
-                                response: result,
-                            });
-                        })
-                        .catch((err) => {
-                            res.status(500).json({
-                                status: false,
-                                response: err,
-                            });
+                
+                sock
+                    .sendMessage(numberWA, {
+                        text: tempMessage,
+                    })
+                    .then((result) => {
+                        res.status(200).json({
+                            status: true,
+                            response: result,
                         });
-                }
+                    })
+                    .catch((err) => {
+                        res.status(500).json({
+                            status: false,
+                            response: err,
+                        });
+                    });
             } else {
                 res.status(500).json({
                     status: false,
