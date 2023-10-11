@@ -1,6 +1,6 @@
 
 
-port 8001
+atualmente na porta 8001
 
 **/** server working <br>
 **/scan** hoolehay

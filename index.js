@@ -121,7 +121,7 @@ const isConnected = () => {
     return sock?.user ? true : false;
 };
 
-app.get("/send-message", async (req, res) => {
+app.get("/send-contact-message", async (req, res) => {
     const tempMessage = req.query.message;
     const number = req.query.number;
 
@@ -134,6 +134,57 @@ app.get("/send-message", async (req, res) => {
             });
         } else {
             numberWA = number + "@s.whatsapp.net";
+
+            if (isConnected()) {
+
+
+                const exist = await sock.onWhatsApp(numberWA);
+
+                if (exist?.jid || (exist && exist[0]?.jid)) {
+                    sock
+                        .sendMessage(exist.jid || exist[0].jid, {
+                            text: tempMessage,
+                        })
+                        .then((result) => {
+                            res.status(200).json({
+                                status: true,
+                                response: result,
+                            });
+                        })
+                        .catch((err) => {
+                            res.status(500).json({
+                                status: false,
+                                response: err,
+                            });
+                        });
+                }
+            } else {
+                res.status(500).json({
+                    status: false,
+                    response: "Não está conectado",
+                });
+            }
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+app.get("/send-group-message", async (req, res) => {
+    const tempMessage = req.query.message;
+    const number = req.query.number;
+
+    console.log("recebido requisição de envio: grupo " + number + ", texto " + tempMessage);
+
+    let numberWA;
+    try {
+        if (!number) {
+            res.status(500).json({
+                status: false,
+                response: "O numero não existe",
+            });
+        } else {
+            numberWA = number + "@g.us";
 
             if (isConnected()) {
 
