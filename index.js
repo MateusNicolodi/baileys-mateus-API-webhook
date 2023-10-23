@@ -105,8 +105,10 @@ async function connectToWhatsApp() {
         }
     });
 
-    sock.ev.on("messages.upsert", async (msg) => {
-        console.log(msg.messages[0].key);
+    sock.ev.on("messages.update", async (msg) => {
+        console.log(JSON.stringify(msg));
+
+
         
         /*if(msg.messages[0].key.fromMe == false && msg.messages[0].key.remoteJid.includes('@s.whatsapp.net')) {
             sock.sendMessage(msg.messages[0].key.remoteJid, { text : "horray" });
@@ -125,6 +127,7 @@ app.get("/send-contact-message", async (req, res) => {
     const tempMessage = req.query.message;
     const number = req.query.number;
 
+
     let numberWA;
     try {
         if (!number) {
@@ -136,7 +139,6 @@ app.get("/send-contact-message", async (req, res) => {
             numberWA = number + "@s.whatsapp.net";
 
             if (isConnected()) {
-
 
                 const exist = await sock.onWhatsApp(numberWA);
 
@@ -221,69 +223,6 @@ app.get("/send-group-message", async (req, res) => {
         res.status(500).send(err);
     }
 });
-
-/*
-//Recurso é não-confiável, whatsapp cria metadados capazes de diferenciar se é uma fonte não oficial e não renderiza
-app.get("/send-link", async (req, res) => {
-    const tempMessage = req.query.message;
-    const link = req.query.link;
-    const number = req.query.number;
-
-    let numberWA;
-    try {
-        if (!number) {
-            res.status(500).json({
-                status: false,
-                response: "O numero não existe",
-            });
-        } else {
-            numberWA = number + "@s.whatsapp.net";
-
-            if (isConnected()) {
-
-
-                const exist = await sock.onWhatsApp(numberWA);
-
-                const templateButtons = [
-                    {index: 1, urlButton: {displayText: '⭐ BOTÃO!', url: link}}
-                ]
-                
-                const templateMessage = {
-                    text: tempMessage,
-                    footer: 'footer',
-                    templateButtons: templateButtons
-                }
-
-                if (exist?.jid || (exist && exist[0]?.jid)) {
-                    sock
-                        .sendMessage(exist.jid || exist[0].jid, 
-                            templateMessage
-                        )
-                        .then((result) => {
-                            res.status(200).json({
-                                status: true,
-                                response: result,
-                            });
-                        })
-                        .catch((err) => {
-                            res.status(500).json({
-                                status: false,
-                                response: err,
-                            });
-                        });
-                }
-            } else {
-                res.status(500).json({
-                    status: false,
-                    response: "Não está conectado",
-                });
-            }
-        }
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-*/
 
 io.on("connection", async (socket) => {
     soket = socket;
